@@ -1,17 +1,15 @@
 const Asana = require("asana");
 const passport = require("passport");
 const AsanaStrategy = require("passport-asana").Strategy;
-
 const express = require("express");
 const session = require("express-session");
+
 const app = express();
 const port = 3000;
 
-let client = Asana.ApiClient.instance;
-let token = client.authentications["token"];
-// token.accessToken = process.env.PAT;
+const client = Asana.ApiClient.instance;
+const token = client.authentications["token"];
 
-// https://github.com/mjhea0/passport-social-auth/blob/master/server/app.js
 
 passport.serializeUser(function (user, done) {
   done(null, user);
@@ -26,7 +24,7 @@ passport.use(
     {
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: "https://t8dmgz-3000.csb.app/auth/asana/callback",
+      callbackURL: "https://t8dmgz-3000.csb.app/auth/asana/callback", // must be registered as Redirect URI in Asana
     },
     function (accessToken, refreshToken, profile, done) {
       token.accessToken = accessToken;
