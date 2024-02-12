@@ -1,13 +1,13 @@
-const Asana = require("asana");
+const asana = require("asana");
 const passport = require("passport");
-const AsanaStrategy = require("passport-asana").Strategy;
+const asanaStrategy = require("passport-asana").Strategy;
 const express = require("express");
 const session = require("express-session");
 
 const app = express();
 const port = 3000;
 
-const client = Asana.ApiClient.instance;
+const client = asana.ApiClient.instance;
 const token = client.authentications["token"];
 
 
@@ -20,7 +20,7 @@ passport.deserializeUser(function (obj, done) {
 });
 
 passport.use(
-  new AsanaStrategy(
+  new asanaStrategy(
     {
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
@@ -46,7 +46,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/me", (req, res) => {
-  let usersApiInstance = new Asana.UsersApi(); // instance to access users
+  let usersApiInstance = new asana.UsersApi(); // instance to access users
   usersApiInstance.getUser("me").then(
     function (me) {
       res.send(me);
@@ -58,7 +58,6 @@ app.get("/me", (req, res) => {
   );
 });
 
-// let tasksApiInstance = new Asana.TasksApi();
 app.get("/auth/asana", passport.authenticate("Asana"), function (req, res) {
   // The request will be redirected to asana.com for authentication, so this
   // function will not be called.
